@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TCBS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css"
+    />
+    <link rel="stylesheet" href="static/style.css" />
+    <!-- include fontawesome cdn -->
+    <script src="https://kit.fontawesome.com/2d8352b604.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <!-- partial:index.partial.html -->
+    <div class="book-store">
+      <div class="header">
+        <div class="browse">
+          
+
+          <!-- search bar functionalllity  -->
+          <div class="search-bar">
+            <form action="{{ url_for('search_results') }}" method="GET">
+              <input type="text" placeholder="Search Book" , name="query" />
+            </form>
+          </div>
+        </div>
+        <div class="header-title"><a href="{{ url_for('homepage') }}"> tea<span>club</span></div>
+
+        <!-- USER PROFILE IF LOGGED IN -->
+        {% if 'user_id' in session %}
+        
+          
+        <!-- <div style="margin-left: 500px;"><a href="{{ url_for('logout') }}" class="logout-button">Log Out, {{ user.username}}</a></div> -->
+        <div class="profile">
+          <a href="{{ url_for('logout') }}" class="logout-button" style="margin-right: 20px; ;">Log Out, {{ user.username}}</a>
+          <a href="{{ url_for('show_favorites') }}" style="text-decoration: none;"><i class="fa-sharp fa-solid fa-star fa-xl" style="color: #ffd700; margin-right: 10px; margin-bottom: 5px;"></i></a>
+          <div class="user-profile">
+            <a href="{{ url_for('user_detail', user_id=session['user_id']) }}">
+              <img
+                src="https://media.istockphoto.com/id/1412637153/photo/magic-book-with-open-pages-and-abstract-lights-shining-in-darkness-literature-and-fairytale.jpg?b=1&s=170667a&w=0&k=20&c=Ppfi8KUg5lN6X9uhktpl0MwHzUHl_tcb9F-WFjNxnHo="
+                alt=""
+                class="user-img"
+              />
+            </a>
+          </div>
+
+          <!-- TODO MAKE CLICKABLE -->
+          <!-- NEED TO MAKE MENU CLICKABLE! -->
+          <div class="profile-menu">
+          
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-menu"
+            >
+              <path d="M3 12h18M3 6h18M3 18h18" />
+            </svg>
+            Menu
+            <div class="dropdown-content">
+              <a href="/random_book">Get A Random Book</a>
+            
+            </div>
+          </div>
+          
+          
+         
+        </div>
+        {% else %}
+        <!-- SIGN UP AND LOGIN BUTTONS -->
+        <div class="auth-buttons">
+          <a href="{{ url_for('signup') }}" class="signup-button">Sign Up</a>
+          <a href="{{ url_for('login') }}" class="login-button">Log In</a>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="book-slide">
+        <div
+          class="book js-flickity"
+          data-flickity-options='{ "wrapAround": true }'
+        >
+          <!-- HERE IS ANOTER CELL FOR A BOOK -->
+
+          {% for book in books %}
+          <div class="book-cell">
+            <div class="book-img">
+              {% if book is not none and book.volumeInfo is not none %}
+              <img
+                src="{{ book.volumeInfo.imageLinks.thumbnail }}"
+                alt=""
+                class="book-photo"
+              />
+              {% endif %}
+            </div>
+            <div class="book-content">
+              <div class="book-title">{{ book.volumeInfo.title }}</div>
+              <div class="book-author">by {{ book.volumeInfo.authors[0] }}</div>
+              <div class="rate">
+                <div class="ratings-count">
+                  Total Ratings: {{ book.volumeInfo.ratingsCount |
+                  default('N/A') }}
+                </div>
+              </div>
+              <div class="book-sum">
+                {{ book.volumeInfo.description | default('Description not
+                available') }}
+              </div>
+              <a
+                style="text-decoration: none"
+                href="{{ url_for('book_details', book_id=book['id']) }}"
+              >
+                <div class="book-see">See The Book</div>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for message in messages %}
+          <div class="flash-message">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+      <!-- TODO MAYBE TURN IT INTO SEARCH BY RECOMMENDED AUTHORS? -->
+      <div class="main-wrapper">
+        <div class="books-of">
+          <div class="week">
+            <div class="author-title">Recommended authors</div>
+            <div class="author">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/d/d4/J._R._R._Tolkien%2C_ca._1925.jpg"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='J.R.R Tolkien') }}"
+                  >J.R.R Tolkien</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/en/1/1e/C.s.lewis3.JPG"
+                alt=""
+                class="author-img"
+              />
+
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='C.S Lewis')}}"
+                  >C.S Lewis</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcSTP8eM2J7zk8cMjqT8ErQYxOS5UrPoLLJOuUbLTa4U3br6LeYYk3Mt2JVtJ5ZJ1x3rEOqvxDhHbmdniTY"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='Geroge Orwell')}}"
+                  >Geroge Orwell</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcREGDdQT2QFkd_4opGYsd9wlXFVZMeq72vyuvc9ll4gqUfE_hPgAPCaWVgRZdXP1eD8VBLt3PMJdqfYLns"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='Aldous Huxley')}}"
+                  >Aldous Huxley</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://t3.gstatic.com/licensed-image?q=tbn:ANd9GcQY3XL36HX8aCWHcLsgtno6ZGGTZ1sj6yqcwWePVZcrIZ5gyoOO-gdQNo017iC6NzlxX8ZMXPQxkekgcUA"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='Ernest Hemingway')}}"
+                  >Ernest Hemingway</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSbWpXNvj-m3_xaQm4m9ALrf3c1D-KscNie2FOxi42FjzMZ5gxf"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='Mark Twain')}}"
+                  >Mark Twain</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- TODO change this to be dynamically added -->
+
+          <div class="week year">
+            <div class="author-title">Books of the year</div>
+
+            {% for book in books_of_the_year %}
+            <div class="year-book">
+              <img
+                src="{{ book.volumeInfo.imageLinks.thumbnail }}"
+                alt=""
+                class="year-book-img"
+              />
+              <div class="year-book-content">
+                <div class="year-book-name">
+                  <a href="{{ url_for('book_details', book_id=book.id) }}"
+                    >{{ book.volumeInfo.title }}</a
+                  >
+                </div>
+                <div class="year-book-author">
+                  by {{ book.volumeInfo.authors[0] if book.volumeInfo.authors
+                  else 'Unknown' }}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="overlay"></div>
+        </div>
+
+        <div class="popular-books">
+          <div class="main-menu">
+            <div class="genre">Popular by Genre</div>
+            <div class="book-types">
+              <a href="#" class="book-type active"> All Genres</a>
+              <a href="#" class="book-type"> Fantasy</a>
+              <a href="#" class="book-type"> Science</a>
+              <a href="#" class="book-type"> Fiction</a>
+              <a href="#" class="book-type"> Philosophy</a>
+              <a href="#" class="book-type"> Biography</a>
+            </div>
+          </div>
+          
+          <div class="book-cards">
+            {% for book in most_popular_books %}
+            <div class="book-card">
+              <div class="content-wrapper">
+                <img src="{{ book.volumeInfo.imageLinks.thumbnail }}" alt="" class="book-card-img" />
+                <div class="card-content">
+                  <div class="book-name">{{ book.volumeInfo.title }}</div>
+                  <div class="book-by">by {{ book.volumeInfo.authors|join(', ') }}</div>
+                  <div class="rate">
+                    <!-- Rating code here -->
+                  </div>
+                  <div class="book-sum card-sum">{{ book.volumeInfo.description }}</div>
+                </div>
+              </div>
+              <div class="like-profile">
+              </div>
+              <div class="like-name-wrapper">
+              <div class="like-name">
+                <div class="details-wrapper">
+                <span class="details-text">Explore Details</span> <a href="{{ url_for('book_details', book_id=book.id) }}"> <b>HERE</b></a>
+                </div>
+              </div>
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+          </div>
+          
+
+          
+
+            
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- partial -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="static/main.js"></script>
+  </body>
+</html>

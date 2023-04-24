@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TCBS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css"
+    />
+    <link rel="stylesheet" href="static/style.css" />
+    <script src="https://kit.fontawesome.com/2d8352b604.js" crossorigin="anonymous"></script>
+
+  </head>
+  <body>
+    <!-- partial:index.partial.html -->
+    <div class="book-store">
+      <div class="header">
+        <div class="browse">
+          
+
+          <!-- search bar functionalllity  -->
+          <div class="search-bar">
+            <form action="{{ url_for('search_results') }}" method="GET">
+              <input type="text" placeholder="Search Book" , name="query" />
+            </form>
+          </div>
+        </div>
+        <div class="header-title"><a href="{{ url_for('homepage') }}">tea<span>club</span></a></div>
+
+        <!-- USER PROFILE IF LOGGED IN -->
+        {% if 'user_id' in session %}
+        <div class="profile">
+          <a href="{{ url_for('logout') }}" class="logout-button" style="margin-right: 20px; ;">Log Out, {{ user.username}}</a>
+          <a href="{{ url_for('show_favorites') }}" style="text-decoration: none;"><i class="fa-sharp fa-solid fa-star fa-xl" style="color: #ffd700; margin-right: 10px; margin-bottom: 5px;"></i></a>
+          <div class="user-profile">
+            <a href="{{ url_for('user_detail', user_id=session['user_id']) }}">
+              <img
+                src="https://media.istockphoto.com/id/1412637153/photo/magic-book-with-open-pages-and-abstract-lights-shining-in-darkness-literature-and-fairytale.jpg?b=1&s=170667a&w=0&k=20&c=Ppfi8KUg5lN6X9uhktpl0MwHzUHl_tcb9F-WFjNxnHo="
+                alt=""
+                class="user-img"
+              />
+            </a>
+          </div>
+
+          <!-- TODO MAKE CLICKABLE -->
+          <!-- NEED TO MAKE MENU CLICKABLE! -->
+          <div class="profile-menu">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-menu"
+            >
+              <path d="M3 12h18M3 6h18M3 18h18" />
+            </svg>
+            Menu
+            <div class="dropdown-content">
+              <a href="/random_book">Get A Random Book</a>
+              
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <!-- SIGN UP AND LOGIN BUTTONS -->
+        <div class="auth-buttons">
+          <a href="{{ url_for('signup') }}" class="signup-button">Sign Up</a>
+          <a href="{{ url_for('login') }}" class="login-button">Log In</a>
+        </div>
+        {% endif %}
+      </div>
+
+      
+
+      <!-- TODO MAYBE TURN IT INTO SEARCH BY RECOMMENDED AUTHORS? -->
+      <div class="main-wrapper">
+        <div class="books-of">
+          <div class="week">
+            <div class="author-title">Recommended authors</div>
+            <div class="author">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/d/d4/J._R._R._Tolkien%2C_ca._1925.jpg"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='J.R.R Tolkien') }}"
+                  >J.R.R Tolkien</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/en/1/1e/C.s.lewis3.JPG"
+                alt=""
+                class="author-img"
+              />
+
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='C.S Lewis')}}"
+                  >C.S Lewis</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcSTP8eM2J7zk8cMjqT8ErQYxOS5UrPoLLJOuUbLTa4U3br6LeYYk3Mt2JVtJ5ZJ1x3rEOqvxDhHbmdniTY"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='Geroge Orwell')}}"
+                  >Geroge Orwell</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcREGDdQT2QFkd_4opGYsd9wlXFVZMeq72vyuvc9ll4gqUfE_hPgAPCaWVgRZdXP1eD8VBLt3PMJdqfYLns"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='Aldous Huxley')}}"
+                  >Aldous Huxley</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://t3.gstatic.com/licensed-image?q=tbn:ANd9GcQY3XL36HX8aCWHcLsgtno6ZGGTZ1sj6yqcwWePVZcrIZ5gyoOO-gdQNo017iC6NzlxX8ZMXPQxkekgcUA"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='Ernest Hemingway')}}"
+                  >Ernest Hemingway</a
+                >
+              </div>
+            </div>
+            <div class="author">
+              <img
+                src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSbWpXNvj-m3_xaQm4m9ALrf3c1D-KscNie2FOxi42FjzMZ5gxf"
+                alt=""
+                class="author-img"
+              />
+              <div class="author-name">
+                <a
+                  style="text-decoration: none; color: black"
+                  href="{{ url_for('search_results', query='Mark Twain')}}"
+                  >Mark Twain</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- TODO change this to be dynamically added -->
+
+          <div class="week year">
+            <div class="author-title">Books of the year</div>
+
+            {% for book in books_of_the_year %}
+            <div class="year-book">
+              <img
+                src="{{ book.volumeInfo.imageLinks.thumbnail }}"
+                alt=""
+                class="year-book-img"
+              />
+              <div class="year-book-content">
+                <div class="year-book-name">
+                  <a href="{{ url_for('book_details', book_id=book.id) }}"
+                    >{{ book.volumeInfo.title }}</a
+                  >
+                </div>
+                <div class="year-book-author">
+                  by {{ book.volumeInfo.authors[0] if book.volumeInfo.authors
+                  else 'Unknown' }}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="overlay"></div>
+        </div>
+
+        <div class="popular-books">
+          
+          <div class="book-cards">
+          {% for book in data['items'] %}
+          
+            
+            <div class="book-card">
+              <div class="content-wrapper">
+                {% if book.volumeInfo.imageLinks %}
+  <img src="{{ book.volumeInfo.imageLinks.thumbnail }}" alt="" class="book-card-img" />
+{% else %}
+  <img src="data:image/png;base64,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" alt="" class="book-card-img" />
+{% endif %}
+                <div class="card-content">
+                  <div class="book-name">{{ book.volumeInfo.title }}</div>
+                  <div class="book-by">by {{ book.volumeInfo.authors|join(', ') }}</div>
+                  <div class="rate">
+                    <!-- Rating code here -->
+                  </div>
+                  <div class="book-sum card-sum">{{ book.volumeInfo.description }}</div>
+                </div>
+              </div>
+              <div class="like-profile">
+              </div>
+              <div class="like-name">
+                <div class="details-wrapper">
+                <span class="details-text">Explore Details</span> <a href="{{ url_for('book_details', book_id=book.id) }}">here</a>
+                </div>
+              </div>
+            </div>
+          
+          
+          {% endfor %}
+        </div>
+          </div>
+          
+
+          
+
+            
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- partial -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="static/main.js"></script>
+  </body>
+</html>

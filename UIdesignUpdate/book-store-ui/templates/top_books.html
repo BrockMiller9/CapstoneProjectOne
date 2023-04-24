@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block title %}Top Books{% endblock %} {% block
+content %}
+<h1 style="text-align: center">Top Books</h1>
+<div class="container">
+  {% for book in books %}
+  <div class="book">
+    <h2>
+      <a href="{{ url_for('book_details', book_id=book['id']) }}"
+        >{{ book.volumeInfo.title }}</a
+      >
+    </h2>
+    <p>
+      By: {{ ', '.join(book.volumeInfo.authors) if book.volumeInfo.authors else
+      'Unknown' }}
+    </p>
+    {% if book.volumeInfo.imageLinks and book.volumeInfo.imageLinks.thumbnail %}
+    <img
+      src="{{ book.volumeInfo.imageLinks.thumbnail }}"
+      alt="{{ book.volumeInfo.title }}"
+    />
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

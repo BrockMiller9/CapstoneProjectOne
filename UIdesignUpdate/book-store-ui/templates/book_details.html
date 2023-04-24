@@ -1,0 +1,72 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <div class="results-details">
+    <div class="results-cover">
+      {% if book.volumeInfo.imageLinks %}
+      <img
+        src="{{ book.volumeInfo.imageLinks.thumbnail }}"
+        alt="{{ book.volumeInfo.title }} book cover"
+        class="img-thumbnail"
+      />
+      {% else %}
+      <img
+        src="/static/images/placeholder.png"
+        alt="{{ book.volumeInfo.title }} book cover"
+        class="img-thumbnail"
+      />
+      {% endif %}
+    </div>
+    <div class='results-info'>
+      <h1 class="book-details-title">{{ book.volumeInfo.title }}</h1>
+      <h3>{{ book.volumeInfo.subtitle }}</h3>
+      <p>
+        <strong>Author(s):</strong> {{ book.volumeInfo.authors|join(', ') }}
+      </p>
+      <p><strong>Publisher:</strong> {{ book.volumeInfo.publisher }}</p>
+      <p>
+        <strong>Published Date:</strong> {{ book.volumeInfo.publishedDate }}
+      </p>
+      {% if book.volumeInfo.averageRating %}
+      <p>
+    
+        {% if book.volumeInfo.averageRating is defined %}
+        <p>
+          <strong>Average rating:</strong>
+          {% for i in range(0, book.volumeInfo.averageRating|int) %}
+            <i class="fas fa-star star-gold"></i>
+          {% endfor %}
+          {% for i in range(book.volumeInfo.averageRating|int, 5) %}
+            <i class="fa fa-star"></i>
+          {% endfor %}
+        </p>
+      {% endif %}
+      </p>
+      {% endif %} {% if book.volumeInfo.ratingsCount %}
+      <p><strong>Ratings count:</strong> {{ book.volumeInfo.ratingsCount }}</p>
+      {% endif %} {% if book.volumeInfo.reviewsCount %}
+      <p><strong>Reviews count:</strong> {{ book.volumeInfo.reviewsCount }}</p>
+      {% endif %}
+      <p>
+        <strong>Description:</strong> {{ book.volumeInfo.description|safe }}
+      </p>
+      <p>
+        <a
+          href="{{ book.volumeInfo.previewLink }}"
+          class="submit"
+          target="_blank"
+          >Preview</a
+        >
+      </p>
+      {% if session.username %}
+      <form id="favorite-form" action="{{ url_for('add_favorite', book_id=book.id) }}" method="POST">
+        <button type="submit" class="submit">Add to Favorites</button>
+      </form>
+      {% endif %}
+
+      <br />
+      <a href="{{ url_for('homepage') }}" class="submit">Go back</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

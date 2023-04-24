@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{% block title %}My Book Website{% endblock %}</title>
+
+    <link rel="stylesheet" href="/static/style.css?q=1280549780" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+  
+  </head>
+  <body>
+    <div class="book-store">
+      <div class="header">
+        <div class="browse">
+          
+
+          <!-- search bar functionalllity  -->
+          <div class="search-bar">
+            <form action="{{ url_for('search_results') }}" method="GET">
+              <input type="text" placeholder="Search Book" , name="query" />
+            </form>
+          </div>
+        </div>
+        <div class="header-title"><a href="{{ url_for('homepage') }}">tea<span>club</span></a></div>
+
+        <!-- USER PROFILE IF LOGGED IN -->
+        {% if 'user_id' in session %}
+        <div class="profile">
+          <a href="{{ url_for('logout') }}" class="logout-button" style="margin-right: 20px; ;">Log Out, {{ user.username}}</a>
+          <a href="{{ url_for('show_favorites') }}" style="text-decoration: none;"><i class="fa-sharp fa-solid fa-star fa-xl" style="color: #ffd700; margin-right: 10px; margin-bottom: 5px;"></i></a>
+          <div class="user-profile">
+            <a href="{{ url_for('user_detail', user_id=session['user_id']) }}">
+              <img
+                src="https://media.istockphoto.com/id/1412637153/photo/magic-book-with-open-pages-and-abstract-lights-shining-in-darkness-literature-and-fairytale.jpg?b=1&s=170667a&w=0&k=20&c=Ppfi8KUg5lN6X9uhktpl0MwHzUHl_tcb9F-WFjNxnHo="
+                alt=""
+                class="user-img"
+              />
+            </a>
+          </div>
+
+          <!-- TODO MAKE CLICKABLE -->
+          <!-- NEED TO MAKE MENU CLICKABLE! -->
+          <div class="profile-menu">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-menu"
+            >
+              <path d="M3 12h18M3 6h18M3 18h18" />
+            </svg>
+            Menu
+            <div class="dropdown-content">
+              <a href="/random_book">Get A Random Book</a>
+              
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <!-- SIGN UP AND LOGIN BUTTONS -->
+        <div class="auth-buttons">
+          <a href="{{ url_for('signup') }}" class="signup-button">Sign Up</a>
+          <a href="{{ url_for('login') }}" class="login-button">Log In</a>
+        </div>
+        {% endif %}
+      </div>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="container mt-3" style="padding: 3px;">
+      {% for category, message in messages %}
+      <div class="alert">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+   
+    
+    
+
+    {% block content %} {% endblock %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+  </body>
+</html>

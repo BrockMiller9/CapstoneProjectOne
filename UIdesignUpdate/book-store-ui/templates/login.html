@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block content %}
+<div class="custom-container">
+  <h3 class="text-center">Log In</h3>
+  <form action="{{ url_for('login') }}" method="POST" class="signup-form">
+    {{ form.csrf_token }}
+    <label for="username">Username</label>
+    <input
+      type="text"
+      name="username"
+      id="username"
+      class="custom-input"
+      value="{{ form.username.data }}"
+    />
+    {% for error in form.username.errors %}
+    <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" class="custom-input" />
+    {% for error in form.password.errors %}
+    <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+    <button type="submit" class="custom-button">Log In</button>
+  </form>
+</div>
+{% endblock %}
